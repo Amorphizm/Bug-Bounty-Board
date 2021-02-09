@@ -1,0 +1,283 @@
+{% extends "base.html" %} {% block title %}Project View{% endblock %}
+
+{% block content %}
+    <div class="d-inline-block">
+        <h1 class="text-center">{{ current_project.name }}</h1>
+    </div>
+
+    <div class="d-inline-block">
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+            Create Ticket
+        </button>
+    </div>
+
+    <!-- kanban board -->
+    <div class="container">
+        <div class="row">
+          <div class="col-sm">
+            New
+            {% for ticket in current_project.tickets %}
+              {% if ticket.status == "New" %}
+                <div class="col-sm">
+                  <div class="card" style="width: 10rem;">
+                      <div class="card-body">
+                          <button type="button" class="close" >
+                              <a href="/delete-ticket/{{ ticket.id }}">
+                                  <span aria-hidden="true">&times;</span>
+                              </a>
+                          </button>
+                          <h5 class="card-title">
+                            {% if ticket.priority == 1 %}
+                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-dice-1-fill text-success" viewBox="0 0 16 16">
+                                <path d="M3 0a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V3a3 3 0 0 0-3-3H3zm5 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
+                              </svg>
+                            {% elif ticket.priority == 2%}
+                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-dice-2-fill text-warning" viewBox="0 0 16 16">
+                                <path d="M0 3a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3H3a3 3 0 0 1-3-3V3zm5.5 1a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0zm6.5 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/>
+                              </svg>
+                            {% else %}
+                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-dice-3-fill text-danger" viewBox="0 0 16 16">
+                                <path d="M3 0a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V3a3 3 0 0 0-3-3H3zm2.5 4a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm8 8a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zM8 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
+                              </svg>
+                            {% endif %}
+                            {{ ticket.name }}
+                          </h5>
+                          <p class="card-text">{{ ticket.description }}</p>
+                          <!-- <a href="/edit-ticket/{{ ticket.id }}" class="btn btn-primary">Edit ticket</a> -->
+                          <a class="btn btn-primary float-right" href="/move-ticket/{{ ticket.id }}/Progress">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
+                              <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
+                            </svg>
+                          </a>
+                      </div>
+                  </div>
+                </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+          <div class="vl"></div>
+          <div class="col-sm">
+            In Progress
+            {% for ticket in current_project.tickets %}
+              {% if ticket.status == "Progress" %}
+                <div class="col-sm">
+                  <div class="card" style="width: 10rem;">
+                      <div class="card-body">
+                          <button type="button" class="close" >
+                              <a href="/delete-ticket/{{ ticket.id }}">
+                                  <span aria-hidden="true">&times;</span>
+                              </a>
+                          </button>
+                          <h5 class="card-title">
+                            {% if ticket.priority == 1 %}
+                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-dice-1-fill text-success" viewBox="0 0 16 16">
+                                <path d="M3 0a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V3a3 3 0 0 0-3-3H3zm5 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
+                              </svg>
+                            {% elif ticket.priority == 2%}
+                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-dice-2-fill text-warning" viewBox="0 0 16 16">
+                                <path d="M0 3a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3H3a3 3 0 0 1-3-3V3zm5.5 1a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0zm6.5 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/>
+                              </svg>
+                            {% else %}
+                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-dice-3-fill text-danger" viewBox="0 0 16 16">
+                                <path d="M3 0a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V3a3 3 0 0 0-3-3H3zm2.5 4a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm8 8a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zM8 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
+                              </svg>
+                            {% endif %}
+                            {{ ticket.name }}
+                          </h5>
+                          <p class="card-text">{{ ticket.description }}</p>
+                          <!-- <a href="/edit-ticket/{{ ticket.id }}" class="btn btn-primary">Edit ticket</a> -->
+                          <a class="btn btn-primary float-right" href="/move-ticket/{{ ticket.id }}/Review">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
+                              <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
+                            </svg>
+                          </a>
+                          <a class="btn btn-primary float-left" href="/move-ticket/{{ ticket.id }}/New">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+                              <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+                            </svg>
+                          </a>
+                      </div>
+                  </div>
+                </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+          <div class="vl"></div>
+          <div class="col-sm">
+            Code Review
+            {% for ticket in current_project.tickets %}
+              {% if ticket.status == "Review" %}
+                <div class="col-sm">
+                  <div class="card" style="width: 10rem;">
+                      <div class="card-body">
+                          <button type="button" class="close" >
+                              <a href="/delete-ticket/{{ ticket.id }}">
+                                  <span aria-hidden="true">&times;</span>
+                              </a>
+                          </button>
+                          <h5 class="card-title">
+                            {% if ticket.priority == 1 %}
+                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-dice-1-fill text-success" viewBox="0 0 16 16">
+                                <path d="M3 0a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V3a3 3 0 0 0-3-3H3zm5 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
+                              </svg>
+                            {% elif ticket.priority == 2%}
+                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-dice-2-fill text-warning" viewBox="0 0 16 16">
+                                <path d="M0 3a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3H3a3 3 0 0 1-3-3V3zm5.5 1a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0zm6.5 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/>
+                              </svg>
+                            {% else %}
+                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-dice-3-fill text-danger" viewBox="0 0 16 16">
+                                <path d="M3 0a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V3a3 3 0 0 0-3-3H3zm2.5 4a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm8 8a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zM8 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
+                              </svg>
+                            {% endif %}
+                            {{ ticket.name }}
+                          </h5>
+                          <p class="card-text">{{ ticket.description }}</p>
+                          <!-- <a href="/edit-ticket/{{ ticket.id }}" class="btn btn-primary">Edit ticket</a> -->
+                          <a class="btn btn-primary float-right" href="/move-ticket/{{ ticket.id }}/QA">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
+                              <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
+                            </svg>
+                          </a>
+                          <a class="btn btn-primary float-left" href="/move-ticket/{{ ticket.id }}/Progress">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+                              <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+                            </svg>
+                          </a>
+                      </div>
+                  </div>
+                </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+          <div class="vl"></div>
+          <div class="col-sm">
+            QA
+            {% for ticket in current_project.tickets %}
+              {% if ticket.status == "QA" %}
+                <div class="col-sm">
+                  <div class="card" style="width: 10rem;">
+                      <div class="card-body">
+                          <button type="button" class="close" >
+                              <a href="/delete-ticket/{{ ticket.id }}">
+                                  <span aria-hidden="true">&times;</span>
+                              </a>
+                          </button>
+                          <h5 class="card-title">
+                            {% if ticket.priority == 1 %}
+                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-dice-1-fill text-success" viewBox="0 0 16 16">
+                                <path d="M3 0a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V3a3 3 0 0 0-3-3H3zm5 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
+                              </svg>
+                            {% elif ticket.priority == 2%}
+                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-dice-2-fill text-warning" viewBox="0 0 16 16">
+                                <path d="M0 3a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3H3a3 3 0 0 1-3-3V3zm5.5 1a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0zm6.5 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/>
+                              </svg>
+                            {% else %}
+                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-dice-3-fill text-danger" viewBox="0 0 16 16">
+                                <path d="M3 0a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V3a3 3 0 0 0-3-3H3zm2.5 4a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm8 8a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zM8 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
+                              </svg>
+                            {% endif %}
+                            {{ ticket.name }}
+                          </h5>
+                          <p class="card-text">{{ ticket.description }}</p>
+                          <!-- <a href="/edit-ticket/{{ ticket.id }}" class="btn btn-primary">Edit ticket</a> -->
+                          <a class="btn btn-primary float-right" href="/move-ticket/{{ ticket.id }}/Complete">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
+                              <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
+                            </svg>
+                          </a>
+                          <a class="btn btn-primary float-left" href="/move-ticket/{{ ticket.id }}/Review">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+                              <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+                            </svg>
+                          </a>
+                      </div>
+                  </div>
+                </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+          <div class="vl"></div>
+          <div class="col-sm">
+            Complete
+            {% for ticket in current_project.tickets %}
+              {% if ticket.status == "Complete" %}
+                <div class="col-sm">
+                  <div class="card" style="width: 10rem;">
+                      <div class="card-body">
+                          <button type="button" class="close" >
+                              <a href="/delete-ticket/{{ ticket.id }}">
+                                  <span aria-hidden="true">&times;</span>
+                              </a>
+                          </button>
+                          <h5 class="card-title">
+                            {% if ticket.priority == 1 %}
+                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-dice-1-fill text-success" viewBox="0 0 16 16">
+                                <path d="M3 0a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V3a3 3 0 0 0-3-3H3zm5 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
+                              </svg>
+                            {% elif ticket.priority == 2%}
+                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-dice-2-fill text-warning" viewBox="0 0 16 16">
+                                <path d="M0 3a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3H3a3 3 0 0 1-3-3V3zm5.5 1a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0zm6.5 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/>
+                              </svg>
+                            {% else %}
+                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-dice-3-fill text-danger" viewBox="0 0 16 16">
+                                <path d="M3 0a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V3a3 3 0 0 0-3-3H3zm2.5 4a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm8 8a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zM8 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
+                              </svg>
+                            {% endif %}
+                            {{ ticket.name }}
+                          </h5>
+                          <p class="card-text">{{ ticket.description }}</p>
+                          <!-- <a href="/edit-ticket/{{ ticket.id }}" class="btn btn-primary">Edit ticket</a> -->
+                          <a class="btn btn-primary float-left" href="/move-ticket/{{ ticket.id }}/QA">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+                              <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+                            </svg>
+                          </a>
+                      </div>
+                  </div>
+                </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal for creating a ticket -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Create a Ticket</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+                <form method='POST'>
+                    <div class="form-group">
+                        <label for="ticket_name">Name Name</label>
+                        <input type="text" class="form-control" id="ticket_name" name="ticket_name" placeholder="Enter ticket name">
+                    </div>
+                    <div class="form-group">
+                        <label for="ticket_desc">Ticket Description</label>
+                        <br>
+                        <textarea name="ticket_desc" id="ticket_desc" class="form-control" rows="3" style="min-width: 100%"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="priority">Ticket Priority</label>
+                        <select class="form-select" aria-label="Default select example" name="priority" id="priority">
+                            <option value="1">Low</option>
+                            <option value="2">Medium</option>
+                            <option value="3">High</option>
+                          </select>
+                    </div>
+                    <div class="modal-footer"></div>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Create Ticket</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        </div>
+    </div>
+{% endblock %}

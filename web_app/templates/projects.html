@@ -1,0 +1,71 @@
+{% extends "base.html" %} {% block title %}Home page{% endblock %}
+
+{% block content %}
+    <div class="d-inline-block">
+        <h1 class="text-center">Projects</h1>
+    </div>
+
+    <div class="d-inline-block">
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+            Create Project
+        </button>
+    </div>
+
+    <!-- list out existing projects -->
+    <div class="container" id="projects">
+        <div class="row">
+            {% for project in user.projects %}
+                <div class="col-sm">
+                    <div class="card" style="width: 18rem;">
+                        <div class="card-body">
+                            <button type="button" class="close" >
+                                <a href="/delete-project/{{ project.id }}">
+                                    <span aria-hidden="true">&times;</span>
+                                </a>
+                            </button>
+                            <h5 class="card-title">{{ project.name }}</h5>
+                            <p class="card-text">{{ project.description }}</p>
+                            <a href="/view-project/{{ project.id }}" class="btn btn-primary">Go to project</a>
+                            <span aria-hidden="true">
+                                <!-- Progeress: %{{ project.progress }} -->
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+  
+  <!-- Modal for creating a project -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Create a Project</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <form method='POST'>
+                <div class="form-group">
+                    <label for="project_name">Project Name</label>
+                    <input type="text" class="form-control" id="project_name" name="project_name" placeholder="Enter project name">
+                </div>
+                <div class="form-group">
+                    <label for="project_desc">Project Description</label>
+                    <br>
+                    <textarea name="project_desc" id="project_desc" class="form-control" rows="3" style="min-width: 100%"></textarea>
+                </div>
+                <div class="modal-footer"></div>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Create Project</button>
+                </div>
+            </form>
+        </div>
+      </div>
+    </div>
+  </div>
+    
+{% endblock %}
