@@ -1,15 +1,15 @@
 {% extends "base.html" %} {% block title %}Home page{% endblock %}
 
 {% block content %}
-    <div class="d-inline-block">
-        <h1 class="text-center">Projects</h1>
-    </div>
-
-    <div class="d-inline-block">
-        <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-            Create Project
-        </button>
+    <div class="container-fluid row">
+        <div class="col-sm">
+            <h1 class="text-left d-inline-block">Projects</h1>
+            <h1 class="float-right d-inline-block"> 
+                <button type="button" id="create-btn" class="text-right btn btn-primary mb-0" data-toggle="modal" data-target="#exampleModal">
+                    Create Project
+                </button>
+            </h1>
+        </div> 
     </div>
 
     <!-- list out existing projects -->
@@ -26,7 +26,7 @@
                             </button>
                             <h5 class="card-title">{{ project.name }}</h5>
                             <p class="card-text">{{ project.description }}</p>
-                            <a href="/view-project/{{ project.id }}" class="btn btn-primary">Go to project</a>
+                            <a href="/projects/{{ project.id }}" class="btn btn-primary">Go to project</a>
                             <span aria-hidden="true">
                                 <!-- Progeress: %{{ project.progress }} -->
                             </span>

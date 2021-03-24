@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, flash, redirect, url_for
+from flask import Blueprint, render_template, request, flash, redirect, url_for, jsonify
 from flask_login import login_required, current_user
 from .models import Project, Ticket
 from . import db
@@ -6,7 +6,12 @@ from . import db
 views = Blueprint('views', __name__)
 
 # @ is a decorator that usese the below finction when it is hit
-@views.route('/', methods=['GET', 'POST'])
+@views.route('/', methods=['GET'])
+@login_required
+def get_out():
+    return redirect(url_for('views.projects'))
+
+@views.route('/projects', methods=['GET', 'POST'])
 @login_required
 def projects():
     if request.method == 'POST':
@@ -30,7 +35,7 @@ def projects():
         
     return render_template("projects.html", user=current_user)
 
-@views.route('/view-project/<project_id>', methods=['GET', 'POST'])
+@views.route('/projects/<project_id>', methods=['GET', 'POST'])
 def view_project(project_id):
     project = Project.query.get(project_id)
     if request.method == 'POST':
@@ -41,10 +46,10 @@ def view_project(project_id):
         new_ticket = Ticket(name=ticket_name, description=ticket_desc, priority=ticket_priority, status="New", project_id=project.id)
         db.session.add(new_ticket)
         db.session.commit()
-    
+
     return render_template("project_view.html", user=current_user, current_project=project)
 
-@views.route('/delete-project/<project_id>', methods=['GET'])
+@views.route('/delete-project/<project_id>', methods=['GET', 'POST'])
 def delete_project(project_id):
     project = Project.query.get(project_id)
     if project:
