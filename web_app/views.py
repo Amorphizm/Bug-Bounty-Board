@@ -47,7 +47,7 @@ def view_project(project_id):
         db.session.add(new_ticket)
         db.session.commit()
 
-    return render_template("project_view.html", user=current_user, current_project=project)
+    return render_template("new_projects_view.html", user=current_user, current_project=project)
 
 @views.route('/delete-project/<project_id>', methods=['GET', 'POST'])
 def delete_project(project_id):
