@@ -109,3 +109,18 @@ def move_ticket(ticket_id, destination):
         flash('Ticket does not exist', category='error')
 
     return redirect(url_for('views.view_project', project_id=ticket.project_id))
+
+@views.route('/view-ticket/<ticket_id>', methods=['GET', 'POST'])
+def view_ticket(ticket_id):
+    ticket = Ticket.query.get(ticket_id)
+    if request.method == 'POST':
+        new_ticket_name = request.form.get('ticket_name')
+        new_ticket_desc = request.form.get('ticket_desc')
+        new_ticket_priority = request.form.get('priority')
+        ticket.name = new_ticket_name
+        ticket.description = new_ticket_desc
+        ticket.priority = new_ticket_priority
+        db.session.commit()
+
+    return render_template("ticket_view.html", user=current_user, current_ticket=ticket)
+
