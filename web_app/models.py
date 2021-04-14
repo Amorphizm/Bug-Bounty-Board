@@ -2,6 +2,12 @@ from . import db
 from flask_login import UserMixin
 from sqlalchemy.sql import func
 
+class Comment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    comment_text = db.Column(db.String(250))
+    creator = db.Column(db.String(50))
+    ticket_id = db.Column(db.Integer, db.ForeignKey('ticket.id'))
+
 class Ticket(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(25))
@@ -9,6 +15,7 @@ class Ticket(db.Model):
     priority = db.Column(db.Integer)
     status = db.Column(db.String(25))
     project_id = db.Column(db.Integer, db.ForeignKey('project.id'))
+    comments = db.relationship('Comment')
 
 class Project(db.Model):
     id = db.Column(db.Integer, primary_key=True)

@@ -33,11 +33,14 @@
             <hr>
             <!-- <div class="card"> -->
                 <div class="card-body">
-                    <h5 class="card-title">Comments - </h5>
-                  <blockquote class="blockquote mb-0">
-                    <p class="fs-6">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
-                    <footer class="blockquote-footer">Comment from <cite title="Source Title">Noah</cite></footer>
-                  </blockquote>
+                <h5 class="card-title">Comments - </h5>
+                    <blockquote class="blockquote mb-0">
+                        {% for comment in current_ticket.comments %}
+                        <p>{{ comment.comment_text }}</p>
+                        <footer class="blockquote-footer">Comment from <cite title="Source Title">{{ comment.creator }}</cite></footer>
+                        <br>
+                        {% endfor %}
+                    </blockquote>
                   <button type="button" id="create-btn" class="text-right btn btn-primary mb-0 float-right" data-toggle="modal" data-target="#commentModal">
                     Add Comment
                   </button> 
@@ -46,7 +49,32 @@
         </div>
     </div>
 
-    <!-- modals -->
+    <!-- comment modal -->
+    <div class="modal fade" id="commentModal" tabindex="-1" role="dialog" aria-labelledby="commentLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="commentModal">Add Comment</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+                <form method='POST'>
+                    <div class="form-group">
+                        <textarea class="form-control" name="new_comment" id="new_comment" rows="3"></textarea>
+                    </div>
+                    <div class="modal-footer"></div>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Add Comment</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <!-- edit modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -78,7 +106,7 @@
                     </div>
                     <div class="modal-footer"></div>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Create Ticket</button>
+                        <button type="submit" class="btn btn-primary">Update Ticket</button>
                     </div>
                 </form>
             </div>
