@@ -1,0 +1,116 @@
+{% extends "base.html" %} {% block title %}Ticket View{% endblock %}
+
+{% block content %}
+    <!-- <div class="container-fluid pt-3">
+        <h3 class="font-weight-light d-inline-block">{{ current_ticket.name }}</h3>
+    </div> -->
+
+    <div class="container-fluid pt-3">
+        <div class="card">
+            <h5 class="card-header">
+                {% if current_ticket.priority == 1 %}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-dice-1-fill text-success" viewBox="0 0 16 16">
+                        <path d="M3 0a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V3a3 3 0 0 0-3-3H3zm5 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
+                    </svg>
+                {% elif current_ticket.priority == 2%}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-dice-2-fill text-warning" viewBox="0 0 16 16">
+                        <path d="M0 3a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3H3a3 3 0 0 1-3-3V3zm5.5 1a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0zm6.5 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/>
+                    </svg>
+                {% else %}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-dice-3-fill text-danger" viewBox="0 0 16 16">
+                        <path d="M3 0a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V3a3 3 0 0 0-3-3H3zm2.5 4a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm8 8a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zM8 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
+                    </svg>
+                {% endif %}
+                {{ current_ticket.name }}
+                <button type="button" id="create-btn" class="text-right btn btn-primary mb-0 float-right" data-toggle="modal" data-target="#exampleModal">
+                    Edit Ticket
+                </button>
+            </h5>
+            <div class="card-body">
+              <h5 class="card-title">Description - </h5>
+              <p class="card-text">{{ current_ticket.description }}</p>
+            </div>
+            <hr>
+            <!-- <div class="card"> -->
+                <div class="card-body">
+                <h5 class="card-title">Comments - </h5>
+                    <blockquote class="blockquote mb-0">
+                        {% for comment in current_ticket.comments %}
+                        <p>{{ comment.comment_text }}</p>
+                        <footer class="blockquote-footer">Comment from <cite title="Source Title">{{ comment.creator }}</cite></footer>
+                        <br>
+                        {% endfor %}
+                    </blockquote>
+                  <button type="button" id="create-btn" class="text-right btn btn-primary mb-0 float-right" data-toggle="modal" data-target="#commentModal">
+                    Add Comment
+                  </button> 
+                </div>
+            <!-- </div> -->
+        </div>
+    </div>
+
+    <!-- comment modal -->
+    <div class="modal fade" id="commentModal" tabindex="-1" role="dialog" aria-labelledby="commentLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="commentModal">Add Comment</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+                <form method='POST'>
+                    <div class="form-group">
+                        <textarea class="form-control" name="new_comment" id="new_comment" rows="3"></textarea>
+                    </div>
+                    <div class="modal-footer"></div>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Add Comment</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <!-- edit modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Edit Ticket</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+                <form method='POST'>
+                    <div class="form-group">
+                        <label for="ticket_name">Name</label>
+                        <input type="text" class="form-control" id="ticket_name" name="ticket_name" value="{{ current_ticket.name }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="ticket_desc">Ticket Description</label>
+                        <br>
+                        <textarea name="ticket_desc" id="ticket_desc" class="form-control" rows="3" style="min-width: 100%">{{ current_ticket.description }}</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="priority">Ticket Priority</label>
+                        <select class="form-select" aria-label="Default select example" name="priority" id="priority">
+                            <option selected value="{{ current_ticket.priority }}">Select New Priority</option>
+                            <option value="1">Low</option>
+                            <option value="2">Medium</option>
+                            <option value="3">High</option>
+                          </select>
+                    </div>
+                    <div class="modal-footer"></div>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Update Ticket</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for, jsonify
 from flask_login import login_required, current_user
-from .models import Project, Ticket
+from .models import Project, Ticket, Comment
 from . import db
 
 views = Blueprint('views', __name__)
@@ -47,7 +47,7 @@ def view_project(project_id):
         db.session.add(new_ticket)
         db.session.commit()
 
-    return render_template("project_view.html", user=current_user, current_project=project)
+    return render_template("new_projects_view.html", user=current_user, current_project=project)
 
 @views.route('/delete-project/<project_id>', methods=['GET', 'POST'])
 def delete_project(project_id):
@@ -75,6 +75,9 @@ def delete_ticket(ticket_id):
     if ticket:
         # grab project id for redirect before deleting
         project_id = ticket.project_id
+        if ticket.comments:
+            for comment in ticket.comments:
+                db.session.delete(comment)
         flash('Ticket deleted', category='success')
         db.session.delete(ticket)
         db.session.commit()
@@ -109,3 +112,24 @@ def move_ticket(ticket_id, destination):
         flash('Ticket does not exist', category='error')
 
     return redirect(url_for('views.view_project', project_id=ticket.project_id))
+
+@views.route('/view-ticket/<ticket_id>', methods=['GET', 'POST'])
+def view_ticket(ticket_id):
+    ticket = Ticket.query.get(ticket_id)
+    if request.method == 'POST' and 'ticket_name' in request.form:
+        new_ticket_name = request.form.get('ticket_name')
+        new_ticket_desc = request.form.get('ticket_desc')
+        new_ticket_priority = request.form.get('priority')
+        ticket.name = new_ticket_name
+        ticket.description = new_ticket_desc
+        ticket.priority = new_ticket_priority
+        db.session.commit()
+    elif request.method == 'POST' and 'new_comment' in request.form:
+        comment = request.form.get('new_comment')
+        print(comment)
+        new_comment = Comment(comment_text=comment, creator=current_user.f_name, ticket_id=ticket.id)
+        db.session.add(new_comment)
+        db.session.commit()
+
+    return render_template("ticket_view.html", user=current_user, current_ticket=ticket)
+
